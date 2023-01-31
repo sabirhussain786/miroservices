@@ -1,0 +1,56 @@
+version: '3'
+services:
+  employee-service:
+    image: employee-service
+
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka-server
+      - postgres
+      - gateway-service
+    networks:
+      - microservice-network
+  leave-service:
+    image: leave-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+      - postgres
+      - gateway-service
+    networks:
+      - microservice-network
+  eureka-server:
+    image: eureka-server
+    environment:
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
+    ports:
+      - "8761:8761"
+    networks:
+      - microservice-network
+  spring-cloud-gateway:
+    image: gateway-service
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    ports:
+      - "9090:9090"
+    depends_on:
+      - eureka-server
+    networks:
+      - microservice-network
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_DB=employee_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_SCHEMA=employees_db
+    ports:
+      - "5432:5432"
+    networks:
+      - microservice-network
+networks:
+  microservice-network:
+    driver: bridge
+
