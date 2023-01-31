@@ -3,9 +3,9 @@ FROM openjdk:11-jdk-slim
 
 WORKDIR /app
 
-COPY target/LeaveService-0.0.1-SNAPSHOT.jar /app/leave-microservice.jar
+COPY target/eureka-server-0.0.1-SNAPSHOT.jar /app/eureka-server.jar
 
-EXPOSE 8082
+EXPOSE 8761
 
-CMD ["java", "-jar", "leave-microservice.jar"]
+CMD ["java", "-jar", "eureka-server.jar"]
 
